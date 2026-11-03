@@ -1,0 +1,869 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" content="#0f2b57">
+<title>Forza 10ª CP</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#eceff4;--surface:#fff;--surface2:#f3f5f9;--ink:#0e1a2b;--ink2:#566480;--line:#d9dfe9;
+  --navy:#0f2b57;--navy-ink:#fff;--pri:#1a4486;--pri-ink:#fff;--red:#b3122c;--ok:#1c7a4f;--okbg:#dff3e8;
+  --tp-bg:#fbe3e8;--tp-fg:#8e1027;--td-bg:#fcefd2;--td-fg:#7a4a00;--tn-bg:#e4e9f1;--tn-fg:#3b4963;
+  --wa:#1faa59;--bubble:#dcf8c6;--bubble-ink:#14231a;--shadow:0 -8px 30px rgba(10,20,40,.22);
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  color-scheme:dark;
+  --bg:#0a111d;--surface:#111b2c;--surface2:#162238;--ink:#e7ecf5;--ink2:#94a3bd;--line:#223149;
+  --navy:#0b1a33;--pri:#3d78d6;--red:#e0405a;--ok:#5fd09a;--okbg:#12362a;
+  --tp-bg:#3b1620;--tp-fg:#ff9fb0;--td-bg:#3a2a0a;--td-fg:#ffd184;--tn-bg:#1d2a42;--tn-fg:#b5c2da;
+  --bubble:#1f3a2a;--bubble-ink:#e4f3e8;--shadow:0 -8px 30px rgba(0,0,0,.55);
+}}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0a111d;--surface:#111b2c;--surface2:#162238;--ink:#e7ecf5;--ink2:#94a3bd;--line:#223149;
+  --navy:#0b1a33;--pri:#3d78d6;--red:#e0405a;--ok:#5fd09a;--okbg:#12362a;
+  --tp-bg:#3b1620;--tp-fg:#ff9fb0;--td-bg:#3a2a0a;--td-fg:#ffd184;--tn-bg:#1d2a42;--tn-fg:#b5c2da;
+  --bubble:#1f3a2a;--bubble-ink:#e4f3e8;--shadow:0 -8px 30px rgba(0,0,0,.55);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink)}
+body{font:15px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",sans-serif;-webkit-text-size-adjust:100%}
+button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left}
+input,select,textarea{font:inherit;color:inherit}
+#app{max-width:560px;margin:0 auto;min-height:100vh;padding-bottom:calc(84px + env(safe-area-inset-bottom))}
+:focus-visible{outline:3px solid var(--pri);outline-offset:2px}
+
+/* header */
+#top{position:sticky;top:0;z-index:20;background:var(--navy);color:var(--navy-ink);padding:calc(10px + env(safe-area-inset-top)) 12px 0}
+#top::after{content:"";display:block;height:7px;margin:10px -12px 0;background:linear-gradient(var(--red) 0 2px,transparent 2px 5px,var(--red) 5px 7px)}
+.toprow{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.brand{font-weight:800;font-size:18px;letter-spacing:.01em;white-space:nowrap}
+.brand span{font-weight:500;opacity:.8}
+.dnav{display:flex;align-items:center;gap:2px}
+.dnav button,.dnav .dl{height:36px;display:flex;align-items:center;justify-content:center;border-radius:10px}
+.dnav button{width:34px;font-size:22px;color:#fff}
+.dnav .dl{position:relative;padding:0 10px;font-weight:600;font-size:14px;background:rgba(255,255,255,.12);text-transform:capitalize;white-space:nowrap}
+.dl input{position:absolute;inset:0;opacity:0;width:100%;height:100%}
+.dnav .oggi{width:auto;font-size:12px;font-weight:700;padding:0 9px;color:#fff;background:var(--red);border-radius:8px;height:28px;margin-left:4px}
+.segs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.seg{border-radius:12px;padding:7px 8px 6px;background:rgba(255,255,255,.10);color:#fff;display:flex;flex-direction:column;gap:1px;min-height:46px}
+.seg span{font-weight:700;font-size:14px}
+.seg small{font-size:12px;opacity:.8;color:inherit}
+.seg.on{background:#fff;color:#0f2b57}
+.seg.on small{opacity:.75;color:#0f2b57}
+
+/* generic */
+main{padding:12px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.h2{font-size:13px;font-weight:700;color:var(--ink2);margin:20px 4px 8px;display:flex;justify-content:space-between;align-items:center}
+.note{background:var(--td-bg);color:var(--td-fg);border-radius:12px;padding:10px 12px;margin:0 0 12px;font-size:14px}
+.empty{color:var(--ink2);text-align:center;padding:22px 8px}
+.mut{color:var(--ink2)}
+small{font-size:12px;color:var(--ink2)}
+.btn{display:flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 18px;border-radius:12px;background:var(--pri);color:var(--pri-ink);font-weight:700;text-align:center;width:100%}
+.btn.ghost{background:var(--surface2);color:var(--ink);border:1px solid var(--line)}
+.btn.wa{background:var(--wa);color:#fff}
+.btn.sm{min-height:38px;font-size:14px;width:auto;padding:0 14px}
+.lnk{color:var(--pri);font-weight:600;padding:8px 4px}
+.lnk.danger{color:var(--red)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.in{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface);padding:0 12px;font-size:16px}
+textarea.in{padding:10px 12px;line-height:1.4}
+.up{text-transform:uppercase}
+label{display:block;font-size:13px;font-weight:600;color:var(--ink2);margin-top:12px}
+label .in{margin-top:5px;color:var(--ink);font-weight:400}
+.tag{display:inline-block;max-width:55%;font-size:12px;font-weight:700;padding:3px 8px;border-radius:999px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;vertical-align:middle}
+.tag.P{background:var(--tp-bg);color:var(--tp-fg)}.tag.D{background:var(--td-bg);color:var(--td-fg)}.tag.N{background:var(--tn-bg);color:var(--tn-fg)}
+.tag.ok{background:var(--okbg);color:var(--ok)}
+
+/* forza cascade */
+.casc{display:grid;grid-template-columns:1fr auto 1fr auto 1.25fr;align-items:center;gap:4px;margin-bottom:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 4px;text-align:center}
+.tile small{display:block;font-weight:600}
+.tile b{display:block;font-size:38px;line-height:1.05;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums;margin-top:2px}
+.tile.main{background:var(--navy);border-color:var(--navy);color:#fff;padding:16px 4px}
+.tile.main small{color:#cfd9ea}
+.tile.main b{font-size:50px}
+.gap{display:flex;flex-direction:column;align-items:center;gap:2px}
+.gap em{font-style:normal;font-weight:800;font-size:13px;color:var(--tp-fg);background:var(--tp-bg);border-radius:999px;padding:2px 7px;font-variant-numeric:tabular-nums}
+.gap.z em{background:var(--tn-bg);color:var(--tn-fg)}
+.plrows{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:6px}
+.plrows button{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:10px 12px;display:flex;flex-direction:column;gap:2px}
+.plrows span{font-variant-numeric:tabular-nums;color:var(--ink2)}
+.plrows strong{color:var(--ink)}
+.list{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.list>*+*{border-top:1px solid var(--line)}
+.prow{display:flex;align-items:center;gap:10px;width:100%;padding:13px 14px;min-height:50px}
+.prow .pn{flex:1;font-weight:600}
+.prow .cnt{font-weight:800;font-size:18px;min-width:26px;text-align:right;font-variant-numeric:tabular-nums}
+.prow.zero{opacity:.5}
+.pplist{background:var(--surface2);padding:4px 0}
+.pp{display:flex;justify-content:space-between;gap:8px;padding:9px 14px 9px 22px;width:100%}
+.pp small{white-space:nowrap}
+.pp small.exp{color:var(--red);font-weight:700}
+
+/* personale */
+.tools{display:flex;gap:8px;margin-bottom:10px}
+.tools .in{flex:1}
+.fchips{display:flex;gap:6px;margin-bottom:10px;overflow-x:auto}
+.fc{padding:7px 13px;border-radius:999px;background:var(--surface);border:1px solid var(--line);font-weight:600;font-size:14px;white-space:nowrap}
+.fc.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ghd{font-size:13px;font-weight:700;color:var(--ink2);padding:10px 14px 6px;background:var(--surface2)}
+.prsn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 14px;min-height:54px}
+.prsn .nr{width:22px;text-align:right;color:var(--ink2);font-size:12px;font-variant-numeric:tabular-nums}
+.prsn .nm{flex:1;min-width:0}
+.prsn .nm small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prsn.sel{background:var(--okbg)}
+.ck{width:24px;height:24px;border-radius:8px;border:2px solid var(--line);display:flex;align-items:center;justify-content:center;font-weight:800;color:var(--ok);flex:none}
+.sel .ck{border-color:var(--ok)}
+.pl{font-size:12px;font-weight:700;color:var(--ink2)}
+
+/* servizi / sport / lezioni */
+.srow{display:flex;gap:10px;align-items:center;width:100%;padding:13px 14px;min-height:54px}
+.srow .sn{font-weight:700;min-width:0;flex:1}
+.srow .sv{display:flex;flex-wrap:wrap;gap:4px;justify-content:flex-end;max-width:60%}
+.pill{background:var(--tn-bg);color:var(--tn-fg);font-weight:600;font-size:13px;padding:3px 9px;border-radius:999px}
+.pill.on{background:var(--okbg);color:var(--ok)}
+.sgrp{padding:12px 14px 4px;display:flex;justify-content:space-between;gap:8px}
+.sgrp b{font-size:15px}
+.lez{display:flex;gap:12px;padding:12px 14px;align-items:baseline}
+.lez time{font-variant-numeric:tabular-nums;font-weight:700;min-width:96px;color:var(--pri)}
+.sub{display:grid;grid-template-columns:1fr 1fr;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:3px;margin-bottom:12px;gap:3px}
+.sub button{text-align:center;padding:10px;border-radius:999px;font-weight:700;color:var(--ink2)}
+.sub button.on{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+
+/* messaggio */
+.bubble{background:var(--bubble);color:var(--bubble-ink);border-radius:14px 14px 14px 4px;padding:12px 14px;white-space:pre-wrap;word-break:break-word;font-size:14.5px;line-height:1.45;margin-bottom:12px}
+.bubble b{font-weight:800}
+.acts{display:grid;gap:8px}
+
+/* sheet */
+#sheet .back{position:fixed;inset:0;background:rgba(5,10,20,.55);z-index:40}
+#sheet .sh{position:fixed;left:0;right:0;bottom:0;z-index:41;max-width:560px;margin:0 auto;background:var(--surface);border-radius:20px 20px 0 0;max-height:90vh;overflow:auto;padding:14px 16px calc(18px + env(safe-area-inset-bottom));box-shadow:var(--shadow);animation:up .18s ease-out}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){#sheet .sh{animation:none}}
+.sh-h{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:4px}
+.sh-h b{font-size:18px}.sh-h small{display:block}
+.x{width:36px;height:36px;border-radius:10px;background:var(--surface2);text-align:center;font-size:18px;display:flex;align-items:center;justify-content:center}
+.gl{font-size:13px;font-weight:700;color:var(--ink2);margin:16px 0 6px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{padding:9px 12px;border-radius:12px;background:var(--surface2);border:1px solid var(--line);font-weight:600;font-size:14px;min-height:40px}
+.chip.on{background:var(--navy);border-color:var(--navy);color:#fff}
+.cust{margin-top:12px;border:1px dashed var(--ink2);border-radius:14px;padding:4px 12px 12px}
+.seg2{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;gap:4px;background:var(--surface2);border:1px solid var(--line);border-radius:12px;padding:3px}
+.seg2 button{text-align:center;padding:10px 4px;border-radius:999px;font-weight:700;font-size:14px;color:var(--ink2)}
+.seg2 button.on{background:var(--navy);color:#fff}
+.pv{margin-top:10px;font-size:14px;background:var(--surface2);border-radius:10px;padding:99px 11px}
+.pv b{font-variant-numeric:tabular-nums}
+.stack{display:grid;gap:8px;margin-top:16px}
+.lrow{display:grid;grid-template-columns:104px 1fr 40px;gap:6px;margin-bottom:6px}
+.lrow .x{height:46px;width:40px}
+.pk{margin-top:8px;border:1px solid var(--line);border-radius:12px;overflow:hidden;max-height:42vh;overflow-y:auto}
+.pk>*+*{border-top:1px solid var(--line)}
+.menu{display:grid;gap:8px}
+.menu button{display:flex;align-items:center;gap:12px;padding:14px;background:var(--surface);border:1px solid var(--line);border-radius:14px;width:100%}
+.menu b{display:block}
+.menu svg{width:24px;height:24px;stroke:var(--pri)}
+.logrow{padding:10px 14px;font-size:14px}
+.logrow small{display:block}
+
+/* tab bar */
+#tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+#tabs div{max-width:560px;margin:0 auto;display:grid;grid-template-columns:repeat(6,1fr)}
+#tabs button{display:flex;flex-direction:column;align-items:center;gap:2px;padding:8px 0 7px;font-size:11px;font-weight:600;color:var(--ink2);text-align:center;position:relative}
+#tabs svg{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+#tabs button.on{color:var(--pri)}
+#tabs button.on::before{content:"";position:absolute;top:0;left:22%;right:22%;height:3px;border-radius:0 0 3px 3px;background:var(--red)}
+#toast{position:fixed;left:50%;bottom:calc(88px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:60;background:#14213a;color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;max-width:90%;text-align:center}
+#toast.on{opacity:1}
+.calh{display:flex;align-items:center;justify-content:space-between;margin:0 0 8px}.calh b{text-transform:capitalize}
+.cg{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-bottom:6px}.cg i{font-style:normal;text-align:center;font-size:12px;font-weight:700;color:var(--ink2)}
+.cd{min-height:46px;border-radius:10px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;font-weight:700;text-align:center}
+.cd em{font-style:normal;font-size:11px;font-weight:800;background:var(--tn-bg);color:var(--tn-fg);border-radius:999px;padding:0 6px}
+.cd.we{background:var(--surface2)}.cd.td{border:2px solid var(--red)}
+.cd.sel{background:var(--navy);color:#fff;border-color:var(--navy)}.cd.sel em{background:#fff;color:var(--navy)}
+.wk{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+.wk table{border-collapse:separate;border-spacing:0;font-size:12px;min-width:660px;width:100%}
+.wk th,.wk td{border-bottom:1px solid var(--line);padding:0;text-align:center}
+.wk thead th{padding:6px 2px;color:var(--ink2);font-weight:700;background:var(--surface2)}.wk thead th.td{color:var(--red)}
+.wk thead th:first-child{position:sticky;left:0;z-index:2}
+.wk tbody th{position:sticky;left:0;z-index:1;background:var(--surface);text-align:left;padding:8px;font-size:11px;min-width:92px;max-width:92px;border-right:1px solid var(--line)}
+.wc{width:100%;min-height:44px;padding:4px 2px;font-weight:600;font-size:11px;text-align:center;word-break:break-word}
+.wc.em{color:var(--ink2);opacity:.5;font-weight:400}
+#toast.act{pointer-events:auto}.tu{color:#9cc8ff;font-weight:800;margin-left:8px;padding:6px 4px}
+.pwrap{display:flex;align-items:center}.pwrap .prow,.pwrap .pp{flex:1;min-width:0;width:auto}.pwrap .tag{max-width:none}
+.clr{margin-right:10px;padding:8px 10px;border-radius:10px;background:var(--tp-bg);color:var(--tp-fg);font-weight:700;font-size:13px;white-space:nowrap}
+.xs{width:44px;height:44px;flex:none;text-align:center;color:var(--red);font-size:18px;font-weight:700}
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+</head>
+<body>
+<div id="app">
+  <header id="top"></header>
+  <main id="main"><p class="empty">Sincronizzazione dati da Google Sheets in corso…</p></main>
+</div>
+<nav id="tabs" aria-label="Sezioni"><div></div></nav>
+<div id="sheet"></div>
+<div id="toast" role="status"></div>
+<input type="file" id="file" accept=".json,application/json" hidden>
+
+<script>
+(()=>{
+'use strict';
+const TARGET_URL = "https://docs.google.com/spreadsheets/d/1hj9DMDyKTZL0zWCUfVHSjFZ8OpTcwLRX/export?format=xlsx";
+const PROXY_URL = "https://api.allorigins.win/raw?url=" + encodeURIComponent(TARGET_URL);
+
+const SEED={"roster":[{"pl":1,"grado":"A.U.","cognome":"ABBRUZZESE","nome":"FRANCESCO","prov":"","data":"","nota":"Servizio 04/11"},{"pl":1,"grado":"A.U.","cognome":"AL-HOUTI","nome":"IBRAHIM","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"AL-KUWARI","nome":"ABDULRAHMAN","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"AL-NAIMI","nome":"ABDULLA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"AL-THANI","nome":"JASSIM","prov":"ESAF","data":"2026-11-19","nota":""},{"pl":1,"grado":"A.U.","cognome":"ANZALONE","nome":"ANTONIO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"APOLLO","nome":"EMANUELA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"BERNARDI","nome":"PIETRO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"BOCACCIA","nome":"MIRKO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"BRESCIANI","nome":"EVA","prov":"","data":"","nota":"Messa 02/11 · 25/11 ritrovo 08:20"},{"pl":1,"grado":"A.U.","cognome":"BUCCIERO","nome":"ANTONINO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"BUCCIARELLI","nome":"FRANCESCO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"COFINI","nome":"ANDREA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"DE TROIA","nome":"ERIKA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"DOVO","nome":"ALESSANDRO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"FRANCESCHI","nome":"GIULIA","prov":"","data":"","nota":"18/11 visita ritrovo 09:20"},{"pl":1,"grado":"A.U.","cognome":"GIACOBINO","nome":"VINCENZO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"GROSSETO","nome":"PIERLUIGI","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"IANNOTTA","nome":"ALESSANDRO","prov":"","data":"","nota":"Servizio 04/11"},{"pl":1,"grado":"A.U.","cognome":"MAIMONE","nome":"ANTONINO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"MAJA","nome":"EDOARDO","prov":"SERVIZIO ISOLATO","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"MARCÌ","nome":"SAMUELE MARIA","prov":"","data":"","nota":"Messa 02/11"},{"pl":1,"grado":"A.U.","cognome":"MARIANI","nome":"DORANNA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"MARINO","nome":"GIUSEPPE","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"MARRAZZA","nome":"ALESSANDRO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"MASTROIANNI","nome":"FEDERICO","prov":"","data":"","nota":"Visita 04/11 ore 09:20 ritrovo"},{"pl":1,"grado":"A.U.","cognome":"MISSIAGLIA","nome":"MATTEO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"OLIVIERO","nome":"ALESSIA","prov":"","data":"","nota":"Servizio 04/11"},{"pl":1,"grado":"A.U.","cognome":"PELLECCHIA","nome":"RAFFAELE","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"PREANI","nome":"LORENZO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"RICCERI","nome":"GIULIA","prov":"SERVIZIO ISOLATO","data":"2026-11-05","nota":""},{"pl":1,"grado":"A.U.","cognome":"ROMANO","nome":"JACOPO","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"RUBERTO","nome":"REBECCA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"STAROPOLI","nome":"ALESSIA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"VITALE","nome":"ELISA","prov":"","data":"","nota":""},{"pl":1,"grado":"A.U.","cognome":"ZANUSSI","nome":"GUGLIELMO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"ALBERGHINA","nome":"DANILO","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"BELLANOVA","nome":"CHIARA","prov":"ESAP","data":"2026-11-14","nota":""},{"pl":2,"grado":"A.U.","cognome":"BIANCO","nome":"LEONARDO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"BORACCHIA","nome":"MARCO","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"COLONNA","nome":"DAVIDE","prov":"ALTRO","data":"","nota":"4/11 deposizione corona"},{"pl":2,"grado":"A.U.","cognome":"DAN","nome":"DENISA ELENA","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"DI BONAVENTURA","nome":"SARA","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"FASULO","nome":"ANIELLO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"FERRARO","nome":"FILIPPO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"FILONI","nome":"ALESSANDRO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"FRANCHOMME","nome":"ALBERTO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"GALLINA","nome":"VALERIO","prov":"ALTRO","data":"","nota":"4/11 deposizione corona"},{"pl":2,"grado":"A.U.","cognome":"GIAMBRA","nome":"MANFREDI","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"IZZO","nome":"TOMMASO","prov":"","data":"","nota":"4/11 ore 10:00/12:00 visita medica ritrovo 9.20"},{"pl":2,"grado":"A.U.","cognome":"MAROTTA","nome":"FRANCESCO MARIA","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"MARZI","nome":"MATHIAS","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"MORMILE","nome":"CHRISTIAN","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"NAPOLI","nome":"ANDREA","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"PANICO","nome":"STEFANO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"PAPACCIOLI","nome":"ANTONIO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"PERROTTA","nome":"VITTORIA","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"PICCOLO","nome":"FLAVIA","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"POLLIO","nome":"MARIA LUISA","prov":"ALTRO","data":"","nota":"25/11 ore 09:00/14:00 visita medica ritrovo 8.20"},{"pl":2,"grado":"A.U.","cognome":"ROTILI","nome":"MARCO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"ROVELLA","nome":"MARIANNA","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"RUBINO","nome":"GIORGIA","prov":"","data":"","nota":"25/11 ore 09:00/14:00 visita medica ritrovo 08.20"},{"pl":2,"grado":"A.U.","cognome":"SANTARPIA","nome":"ANIELLO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"SEVRI","nome":"LORENZO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.SC.","cognome":"STELLA","nome":"ALBERTO","prov":"ALTRO","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"TAMBURRINO","nome":"EUGENIA","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"TERRIN","nome":"ETTORE","prov":"ALTRO","data":"","nota":"20/11 ore 09-13 ritrovo 08.20 visita medica"},{"pl":2,"grado":"A.U.","cognome":"TONOLI","nome":"GIORGIA","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"VIRGA","nome":"EDOARDO CARMELO","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"AL-IEDANI","nome":"MURTADHA","prov":"ESAP","data":"2026-11-13","nota":""},{"pl":2,"grado":"A.U.","cognome":"AL-MAADHEED","nome":"KHALID","prov":"","data":"","nota":""},{"pl":2,"grado":"A.U.","cognome":"MAO MAHAD","nome":"JIBRIL","prov":"","data":"","nota":"30/11 ore 10-13 ritrovo ore 9.20 visita medica"}],"servizi":{},"svcNames":["ALZABANDIERA 1","ALZABANDIERA 2","LETTURA MOVM","MUSICA","CAMPANA 1","CAMPANA 2","LEGGIO DEL GEN. CTE","CIRCOLO 1","CIRCOLO 2","MENSA","PALESTRA DARDI","DRAPPELLA BTG","DRAPPELLA CP","PIAZZA ROMA 1","PIAZZA ROMA 2"],"lezioni":{},"gs":[]};
+
+const PRESETS=[['RMD','P'],['LICENZA DI CONVALESCENZA','P'],['PERMESSO L.104','P'],['LICENZA STRAORDINARIA','P'],['GMF','P'],['ASSENTE PER PERMESSO','P'],['PRONTO SOCCORSO','P'],['SERVIZIO ISOLATO','P'],
+  ['CHIEDENTE VISITA','D'],['ESAF','D'],['ESAP','D'],['PERMESSO ORARIO','D'],['QUALIFICATO','D'],['MILITARE DI SERVIZIO','D'],['RMS','D'],['ALTRO','N']];
+const PM=Object.fromEntries(PRESETS);
+const ORDER_PROV=['CHIEDENTE VISITA','ESAF','ESAP','RMD','LICENZA DI CONVALESCENZA','RMS','PERMESSO L.104','LICENZA STRAORDINARIA','GMF','ASSENTE PER PERMESSO','PERMESSO ORARIO','PRONTO SOCCORSO','QUALIFICATO','MILITARE DI SERVIZIO','ALTRO','SERVIZIO ISOLATO'];
+const EFFL={P:'Scala la Presente',D:'Scala la Disponibile',N:'Non scala'};
+const EFFS={P:'Presente',D:'Disponibile',N:'Non scala'};
+const SHIFTS=['00:00-06:00','06:00-12:00','18:00-24:00','MATTINA','SERA'];
+const DASH=new Set(['PIAZZA ROMA 1','PIAZZA ROMA 2']);
+const GIORNI=['','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato','Domenica'];
+const GG=['','Lun','Mar','Mer','Gio','Ven','Sab','Dom'];
+const VN=['Compagnia','1° Plotone','2° Plotone'];
+const KEY='forza10cp-state',CKEY='forza10cp-cfg';
+
+const $=(s,r=document)=>r.querySelector(s);
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const norm=s=>String(s||'').toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9]/g,'');
+const pad=n=>String(n).padStart(2,'0');
+const isoOf=d=>d.getFullYear()+'-'+pad(d.getMonth()+1)+'-'+pad(d.getDate());
+const isoToday=()=>isoOf(new Date());
+const addDays=(iso,n)=>{const d=new Date(iso+'T12:00:00');d.setDate(d.getDate()+n);return isoOf(d)};
+const wday=iso=>(new Date(iso+'T12:00:00').getDay()+6)%7+1;
+const fdate=iso=>iso?iso.split('-').reverse().join('/'):'';
+const proper=s=>String(s||'').toLowerCase().replace(/(^|[^a-zà-ÿ])([a-zà-ÿ])/g,(m,a,b)=>a+b.toUpperCase());
+const gr=g=>String(g||'').replace('A.U.','AU');
+const cmp=(a,b)=>a<b?-1:a>b?1:0;
+function weekNum2(iso){const d=new Date(iso+'T12:00:00'),j=new Date(d.getFullYear(),0,1,12);const off=(j.getDay()+6)%7;const doy=Math.round((d-j)/864e5)+1;return Math.floor((doy+off-1)/7)+1}
+const dlabel=(iso,short)=>{const d=new Date(iso+'T12:00:00');const o={weekday:'short',day:'numeric',month:'short'};if(!short||d.getFullYear()!==new Date().getFullYear())o.year='numeric';return d.toLocaleDateString('it-IT',o).replace('.','')};
+const setPath=(o,path,v)=>{const k=path.split('.');let t=o;for(let i=0;i<k.length-1;i++)t=t[k[i]];t[k[k.length-1]]=v};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const GR0={'mastroianni|federico':'A.CA.SC.','franchomme|alberto':'A.CA.SC.','stella|alberto':'A.SC.','giambra|manfredi':'A.SC.','pellecchia|raffaele':'A.SC.','marzi|mathias':'A.SC.','boracchia|marco':'A.ISTR.','giacobino|vincenzo':'A.ISTR.','perrotta|vittoria':'A.ISTR.','marci|samuele':'A.ISTR.'};
+const gkey=p=>norm(p.cognome)+'|'+norm(String(p.nome||'').split(' ')[0]);
+
+let S=null,CFG={operator:''},D={};
+const UI={view:0,tab:'forza',date:isoToday(),sub:'lez',svm:'cal',altro:null,q:'',pf:'all',open:{},all:false,sheet:null,msgDraft:null};
+
+const ls={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v);return true}catch(e){return false}}};
+
+function save(){
+  if(!S) return;
+  S.rev=Date.now();
+  ls.set(KEY,JSON.stringify(S));
+}
+const saveCfg=()=>ls.set(CKEY,JSON.stringify(CFG));
+
+function commit(txt){
+  if(txt){S.log=S.log||[];S.log.unshift({t:Date.now(),u:CFG.operator||'—',x:txt});if(S.log.length>200)S.log.length=200}
+  save();render();
+}
+
+function initSeed() {
+  const roster=SEED.roster.map((p,i)=>({id:i+1,pl:p.pl,grado:GR0[gkey(p)]||p.grado,cognome:p.cognome,nome:p.nome,prov:p.prov,custom:false,eff:'',data:p.data,nota:p.nota}));
+  return {v:1,rev:Date.now(),nextId:roster.length+1,roster,servizi:{},svcList:SEED.svcNames.map(n=>({n,c:false})),lezioni:{},lezOv:{},gs:[],arch:[],log:[],msg:{saluto:'Comandi Signor Tenente,',intro:{0:'',1:'',2:''}}};
+}
+
+const P=id=>S.roster.find(p=>p.id===id);
+const pn=p=>p?p.cognome+' '+p.nome:'?';
+const inV=(v,p)=>v===0||p.pl===v;
+const inScope=p=>inV(UI.view,p);
+function effOf(p){if(!p.prov)return null;if(p.custom)return p.eff||'N';return PM[p.prov]||p.eff||'N'}
+function forzaOf(list){const fe=list.length;let dp=0,dd=0;list.forEach(p=>{const e=effOf(p);if(e==='P')dp++;else if(e==='D')dd++});return {fe,fp:fe-dp,fd:fe-dp-dd,dp,dd}}
+const forza=v=>forzaOf(S.roster.filter(p=>inV(v,p)));
+function provGroups(v){const g=new Map();S.roster.filter(p=>inV(v,p)).forEach(p=>{if(!p.prov)return;if(!g.has(p.prov))g.set(p.prov,[]);g.get(p.prov).push(p)});return g}
+const pline=p=>`${gr(p.grado)} ${p.cognome} ${p.nome}${p.data?` (${fdate(p.data)})`:''}`.replace(/\s+/g,' ').trim();
+
+function lessonsFor(date){
+  const base=S.lezOv[date]||S.lezioni[wday(date)]||[];
+  const odd=weekNum2(date)%2===1;
+  return base.map(l=>/nuoto/i.test(l.nome)&&!odd?{nome:'A disposizione',ora:l.ora,alt:true}:l);
+}
+const svcIdx=n=>S.svcList.findIndex(s=>s.n===n);
+
+function msgFor(v,date=UI.date){
+  const F=forza(v);
+  const who=v===0?'della 10ª Compagnia':v===1?'del I Plotone':'del II Plotone';
+  const head=S.msg.saluto+(S.msg.intro[v]?' '+S.msg.intro[v]:'');
+  const top=[head,'',`Desideravo inoltrarLe il messaggio relativo alla forza odierna ${fdate(date)} ${who}:`,'',
+    `- Forza Effettiva *${F.fe} AA.UU.*`,`- Forza Presente *${F.fp} AA.UU.*`,`- Forza Disponibile *${F.fd} AA.UU.*`].join('\n');
+  const blocks=[top];
+  if(v===0){const a=forza(1),b=forza(2);blocks.push(`*I PLOTONE*: Eff. ${a.fe} - Pres. ${a.fp} - Disp. ${a.fd}\n*II PLOTONE*: Eff. ${b.fe} - Pres. ${b.fp} - Disp. ${b.fd}`)}
+  for(const [k,arr] of provGroups(v)){
+    const names=v===0?[1,2].flatMap(pl=>arr.filter(p=>p.pl===pl).map(pline).sort(cmp)):arr.map(pline).sort(cmp);
+    blocks.push(`*${k}: ${arr.length}*\n`+names.join('\n'));
+  }
+  const les=lessonsFor(date);
+  if(les.length)blocks.push(`*ATTIVITÀ ODIERNE: ${les.length}*\n`+les.map((l,i)=>`- ${l.nome}${l.ora?` *${l.ora}*`:''}${i<les.length-1?';':''}`).join('\n'));
+  const ents=(S.servizi[date]||[]).map(e=>({e,p:P(e.p)})).filter(x=>x.p&&inV(v,x.p)).sort((a,b)=>svcIdx(a.e.s)-svcIdx(b.e.s));
+  if(ents.length)blocks.push(`*SERVIZI: ${ents.length}*\n`+ents.map(({e,p})=>`- *${e.s}*${DASH.has(e.s)?'-':''}: ${gr(p.grado)} ${p.cognome} ${proper(p.nome)}${e.o?' ('+e.o.replace(/^\(|\)$/g,'')+')':''}`).join('\n'));
+  const wd=wday(date),gsE=S.gs.filter(x=>x.g===wd&&P(x.p)&&inV(v,P(x.p)));
+  if(gsE.length){
+    const sports=[...new Set(gsE.map(x=>x.sport))];
+    blocks.push(`*GRUPPI SPORTIVI: ${sports.length}*\n`+sports.map(sp=>{const rows=gsE.filter(x=>x.sport===sp);
+      return `*${sp.toUpperCase()} ${rows[0].ora}*\n`+rows.map(x=>{const p=P(x.p);return `- ${gr(p.grado)} ${p.cognome} ${proper(p.nome)}`}).join('\n')}).join('\n\n'));
+  }
+  return blocks.join('\n\n');
+}
+
+const IC={
+  forza:'<path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/>',
+  pers:'<circle cx="9" cy="8" r="3.2"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.2a3 3 0 0 1 0 5.6M18 14.3c2 .8 3.5 2.8 3.5 5.7"/>',
+  serv:'<path d="M12 3l7 3v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6z"/><path d="M9 12l2 2 4-4"/>',
+  att:'<rect x="3.5" y="5" width="17" height="15" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  msg:'<path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/>',
+  altro:'<circle cx="5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="19" cy="12" r="1.2"/>',
+  exp:'<path d="M12 3v12M7 10l5 5 5-5M4 20h16"/>',
+  sto:'<path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/>',
+  imp:'<circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/>'
+};
+const svg=n=>`<svg viewBox="0 0 24 24" aria-hidden="true">${IC[n]}</svg>`;
+
+function render(){renderTop();renderTabs();renderMain();if(UI.sheet)renderSheet()}
+function renderTop(){
+  const seg=[0,1,2].map(v=>`<button class="seg${UI.view===v?' on':''}" data-a="view" data-v="${v}"><span>${VN[v]}</span><small>Disp. ${forza(v).fd}</small></button>`).join('');
+  $('#top').innerHTML=`<div class="toprow"><div class="brand">Forza <span>10ª CP</span></div>
+  <div class="dnav"><button data-a="day" data-n="-1" aria-label="Giorno precedente">‹</button><label class="dl" style="margin:0;color:#fff;font-size:14px">${esc(dlabel(UI.date,true))}<input type="date" value="${UI.date}" data-c="date" aria-label="Scegli la data"></label><button data-a="day" data-n="1" aria-label="Giorno successivo">›</button>${UI.date!==isoToday()?'<button class="oggi" data-a="today">Oggi</button>':''}</div></div>
+  <div class="segs" role="tablist">${seg}</div>`;
+}
+function renderTabs(){
+  const T=[['forza','Forza','forza'],['pers','Personale','pers'],['serv','Servizi','serv'],['att','Attività','att'],['msg','WhatsApp','msg'],['altro','Altro','altro']];
+  $('#tabs div').innerHTML=T.map(([k,l,i])=>`<button class="${UI.tab===k?'on':''}" data-a="tab" data-t="${k}">${svg(i)}<span>${l}</span></button>`).join('');
+}
+function renderMain(){
+  if(!S){
+    $('#main').innerHTML='<p class="empty">Sincronizzazione dati da Google Sheets in corso…</p>';
+    return;
+  }
+  const f={forza:viewForza,pers:viewPers,serv:viewServ,att:viewAtt,msg:viewMsg,altro:viewAltro}[UI.tab];
+  $('#main').innerHTML=f();
+  if(UI.tab==='pers')renderPList();
+}
+
+let syncStatusText = "Sincronizzazione in corso...";
+let isSyncOk = false;
+
+function syncChip(){
+  return `<small id="syncchip" style="display:block;margin:0 4px 10px;color:${isSyncOk?'var(--ok)':'var(--red)'}">${esc(syncStatusText)}</small>`;
+}
+
+function viewForza(){
+  const v=UI.view,F=forza(v);let h='';
+  h+=syncChip();
+  h+=`<section class="casc" aria-label="Forza">
+    <div class="tile"><small>Effettiva</small><b>${F.fe}</b></div>
+    <div class="gap${F.dp?'':' z'}"><em>−${F.dp}</em></div>
+    <div class="tile"><small>Presente</small><b>${F.fp}</b></div>
+    <div class="gap${F.dd?'':' z'}"><em>−${F.dd}</em></div>
+    <div class="tile main"><small>Disponibile</small><b>${F.fd}</b></div></section>`;
+  if(v===0)h+=`<section class="plrows">`+[1,2].map(n=>{const f=forza(n);return `<button data-a="view" data-v="${n}"><b>${n}° Plotone</b><span>${f.fe} · ${f.fp} · <strong>${f.fd}</strong></span></button>`}).join('')+`</section><small style="display:block;margin:0 4px 4px">Effettiva · Presente · Disponibile</small>`;
+  const exp=S.roster.filter(inScope).filter(p=>p.prov&&p.data&&p.data<UI.date);
+  if(exp.length)h+=`<div class="note" style="margin-top:12px">${exp.length===1?'1 provvedimento ha':exp.length+' provvedimenti hanno'} la data già passata: ${esc(exp.slice(0,4).map(p=>p.cognome).join(', '))}${exp.length>4?'…':''}</div>`;
+  const g=provGroups(v);
+  const keys=[...ORDER_PROV.filter(k=>g.has(k)),...[...g.keys()].filter(k=>!ORDER_PROV.includes(k))];
+  const zero=UI.all?ORDER_PROV.filter(k=>!g.has(k)):[];
+  const tot=[...g.values()].reduce((a,b)=>a+b.length,0);
+  h+=`<div class="h2"><span>Provvedimenti · ${tot}</span><button class="lnk" data-a="showAll">${UI.all?'Nascondi a zero':'Mostra tutti'}</button></div><div class="list">`;
+  if(!keys.length&&!zero.length)h+=`<p class="empty">Nessun provvedimento attivo.</p>`;
+  for(const k of keys){
+    const arr=g.get(k),e=effOf(arr[0]),open=UI.open[k];
+    h+=`<div><div class="pwrap"><button class="prow" data-a="provOpen" data-k="${esc(k)}" aria-expanded="${!!open}"><span class="pn">${esc(k)}</span><span class="tag ${e}" title="${EFFL[e]}">${EFFS[e]}</span><span class="cnt">${arr.length}</span></button><button class="clr" data-a="grpClear" data-k="${esc(k)}" aria-label="Togli ${esc(k)} a tutti">Togli tutti</button></div>`;
+    if(open)h+=`<div class="pplist">`+arr.map(p=>`<div class="pwrap"><button class="pp" data-a="editP" data-id="${p.id}"><span>${esc(gr(p.grado))} ${esc(p.cognome)} ${esc(p.nome)}${v===0?` <small>${p.pl}° PL</small>`:''}</span><small${p.data&&p.data<UI.date?' class="exp"':''}>${p.data?fdate(p.data):''}</small></button><button class="xs" data-a="pClear" data-id="${p.id}" aria-label="Togli il provvedimento a ${esc(p.cognome)}">✕</button></div>`).join('')+`</div>`;
+    h+=`</div>`;
+  }
+  for(const k of zero)h+=`<div class="prow zero"><span class="pn">${esc(k)}</span><span class="tag ${PM[k]}" title="${EFFL[PM[k]]}">${EFFS[PM[k]]}</span><span class="cnt">0</span></div>`;
+  h+=`</div>`;
+  if(tot)h+=`<button class="lnk danger" data-a="allClear" style="display:block;margin:10px auto 0">Togli tutti i provvedimenti (${tot})</button>`;
+  return h;
+}
+
+function viewPers(){
+  return `<div class="tools"><input class="in" type="search" data-q="q" placeholder="Cerca cognome o nome" value="${esc(UI.q)}" aria-label="Cerca nel personale"><button class="btn sm" data-a="newP" style="min-height:46px">+ Nuovo</button></div>
+  <div class="fchips">${[['all','Tutti'],['prov','Con provvedimento'],['free','Senza provvedimento']].map(([k,l])=>`<button class="fc${UI.pf===k?' on':''}" data-a="pf" data-k="${k}">${l}</button>`).join('')}</div><div id="plist"></div>`;
+}
+function renderPList(){
+  const q=norm(UI.q);let h='';
+  const plots=UI.view===0?[1,2]:[UI.view];
+  for(const pl of plots){
+    const all=S.roster.filter(p=>p.pl===pl);
+    const rows=all.map((p,i)=>({p,nr:i+1})).filter(({p})=>(!q||norm(p.cognome+p.nome).includes(q))&&(UI.pf==='all'||(UI.pf==='prov'?p.prov:!p.prov)));
+    if(UI.view===0)h+=`<div class="ghd">${pl}° Plotone · ${all.length}</div>`;
+    h+=rows.map(({p,nr})=>{const e=effOf(p);return `<button class="prsn" data-a="editP" data-id="${p.id}"><span class="nr">${nr}</span><span class="nm"><b>${esc(p.cognome)}</b> ${esc(p.nome)}${p.grado!=='A.U.'?` <small style="display:inline">${esc(p.grado)}</small>`:''}${p.nota?`<small>${esc(p.nota)}</small>`:''}</span>${p.prov?`<span class="tag ${e}">${esc(p.prov)}${p.data?' · '+fdate(p.data).slice(0,5):''}</span>`:''}</button>`}).join('')||(UI.view!==0?'<p class="empty">Nessun risultato</p>':'');
+  }
+  $('#plist').innerHTML=`<div class="list">${h}</div>`;
+}
+
+const cnt=d=>(S.servizi[d]||[]).filter(e=>{const p=P(e.p);return p&&inScope(p)}).length;
+function viewServ(){
+  const sub=`<div class="sub"><button class="${UI.svm==='cal'?'on':''}" data-a="svm" data-k="cal">Calendario</button><button class="${UI.svm==='wk'?'on':''}" data-a="svm" data-k="wk">Settimana</button></div>`;
+  return sub+(UI.svm==='wk'?svcWeek():svcMonth()+svcDay());
+}
+function svcMonth(){
+  const x=new Date(UI.date+'T12:00:00'),y=x.getFullYear(),m=x.getMonth(),off=(new Date(y,m,1,12).getDay()+6)%7,n=new Date(y,m+1,0).getDate(),td=isoToday();
+  let c='';for(let i=0;i<off;i++)c+='<span></span>';
+  for(let k=1;k<=n;k++){const d=y+'-'+pad(m+1)+'-'+pad(k),q=cnt(d),w=(off+k-1)%7>=5;c+=`<button class="cd${d===UI.date?' sel':''}${d===td?' td':''}${w?' we':''}" data-a="calDay" data-d="${d}" aria-label="${k}: ${q} servizi"><span>${k}</span>${q?`<em>${q}</em>`:''}</button>`}
+  return `<div class="calh"><button class="x" data-a="mon" data-n="-1" aria-label="Mese precedente">‹</button><b>${esc(x.toLocaleDateString('it-IT',{month:'long',year:'numeric'}))}</b><button class="x" data-a="mon" data-n="1" aria-label="Mese successivo">›</button></div><div class="cg">${['L','M','M','G','V','S','D'].map(l=>`<i>${l}</i>`).join('')}${c}</div>`;
+}
+function svcWeek(){
+  const mon=addDays(UI.date,-(wday(UI.date)-1)),days=[0,1,2,3,4,5,6].map(i=>addDays(mon,i)),td=isoToday();
+  const head=days.map(d=>`<th class="${d===td?'td':''}">${GG[wday(d)]}<br>${+d.slice(8)}</th>`).join('');
+  const rows=S.svcList.map((sv,i)=>`<tr><th>${esc(sv.n)}</th>`+days.map(d=>{const es=(S.servizi[d]||[]).filter(e=>e.s===sv.n&&P(e.p)&&inScope(P(e.p)));return `<td><button class="wc${es.length?'':' em'}" data-a="svcOpen" data-i="${i}" data-d="${d}">${es.length?es.map(e=>esc(P(e.p).cognome)).join('<br>'):'+'}</button></td>`}).join('')+'</tr>').join('');
+  return `<div class="calh"><button class="x" data-a="wk" data-n="-1" aria-label="Settimana precedente">‹</button><b>${fdate(days[0]).slice(0,5)} – ${fdate(days[6]).slice(0,5)}</b><button class="x" data-a="wk" data-n="1" aria-label="Settimana successiva">›</button></div><div class="wk"><table><thead><tr><th></th>${head}</tr></thead><tbody>${rows}</tbody></table></div>`;
+}
+function svcDay(){
+  const ents=S.servizi[UI.date]||[];
+  const mine=ents.filter(e=>{const p=P(e.p);return p&&inScope(p)});
+  let h=`<div class="h2" style="margin-top:4px"><span>${esc(dlabel(UI.date))} · ${mine.length} ${mine.length===1?'assegnato':'assegnati'}</span><button class="lnk" data-a="svcNew">+ Nuovo servizio</button></div><div class="list">`;
+  S.svcList.forEach((sv,i)=>{
+    const es=mine.filter(e=>e.s===sv.n);
+    h+=`<button class="srow" data-a="svcOpen" data-i="${i}"><span class="sn">${esc(sv.n)}${sv.c?' <small>(aggiunto)</small>':''}</span><span class="sv">${es.length?es.map(e=>`<span class="pill on">${esc(pn(P(e.p)))}${e.o?' · '+esc(e.o):''}</span>`).join(''):'<span class="mut">Libero</span>'}</span></button>`;
+  });
+  return h+`</div>`;
+}
+
+function viewAtt(){
+  const sub=`<div class="sub"><button class="${UI.sub==='lez'?'on':''}" data-a="sub" data-k="lez">Lezioni</button><button class="${UI.sub==='gs'?'on':''}" data-a="sub" data-k="gs">Sport</button></div>`;
+  return sub+(UI.sub==='lez'?viewLez():viewGs());
+}
+function viewLez(){
+  const les=lessonsFor(UI.date),ov=!!S.lezOv[UI.date];
+  let h=`<div class="h2" style="margin-top:4px"><span>${esc(GIORNI[wday(UI.date)])} ${fdate(UI.date)}${ov?' · modificato solo per questo giorno':''}</span><button class="lnk" data-a="lezEdit">Modifica</button></div><div class="list">`;
+  h+=les.length?les.map(l=>`<div class="lez"><time>${esc(l.ora)}</time><span>${esc(l.nome)}${l.alt?' <small>(nuoto: settimana pari)</small>':''}</span></div>`).join(''):`<p class="empty">Nessuna lezione in programma.</p>`;
+  return h+`</div>`;
+}
+function viewGs(){
+  const wd=wday(UI.date);
+  const es=S.gs.map((x,i)=>({x,i,p:P(x.p)})).filter(({x,p})=>x.g===wd&&p&&inScope(p));
+  const sports=[...new Set(es.map(({x})=>x.sport))];
+  let h=`<div class="h2" style="margin-top:4px"><span>${esc(GIORNI[wd])} · ${sports.length} ${sports.length===1?'gruppo':'gruppi'}</span><button class="lnk" data-a="gsAdd">+ Aggiungi</button></div>`;
+  if(!sports.length)return h+`<div class="list"><p class="empty">Nessun gruppo sportivo oggi.</p></div>`;
+  h+=`<div class="list">`;
+  for(const sp of sports){
+    const rows=es.filter(({x})=>x.sport===sp);
+    h+=`<div><div class="sgrp"><b>${esc(sp)}</b><small>${esc(rows[0].x.ora)}</small></div>`+rows.map(({x,i,p})=>`<button class="prsn" data-a="gsEdit" data-i="${i}"><span class="nm"><b>${esc(p.cognome)}</b> ${esc(p.nome)}${UI.view===0?` <small style="display:inline">${p.pl}° PL</small>`:''}</span><span class="tag ${/^conferm/i.test(x.stato)?'ok':'D'}">${esc(x.stato||'—')}</span></button>`).join('')+`</div>`;
+  }
+  return h+`</div>`;
+}
+
+function viewMsg(){
+  const txt=UI.msgDraft!==null?UI.msgDraft:msgFor(UI.view);
+  const html=esc(txt).replace(/\*([^*\n]+)\*/g,'<b>$1</b>');
+  return `<div class="h2" style="margin-top:4px"><span>Messaggio · ${VN[UI.view]}</span><span class="mut" style="font-weight:500">${fdate(UI.date)}</span></div>
+  ${UI.msgDraft!==null?`<textarea class="in" data-q="md" rows="18" style="margin-bottom:12px">${esc(txt)}</textarea>`:`<div class="bubble">${html}</div>`}
+  <div class="acts"><button class="btn wa" data-a="wa">Invia su WhatsApp</button>
+  <div class="row2"><button class="btn ghost" data-a="copy">Copia testo</button><button class="btn ghost" data-a="editMsg">${UI.msgDraft!==null?'Annulla modifiche':'Modifica testo'}</button></div></div>`;
+}
+
+function viewAltro(){
+  if(UI.altro==='exp')return viewExp();
+  if(UI.altro==='sto')return viewSto();
+  if(UI.altro==='imp')return viewImp();
+  return `<div class="menu">
+   <button data-a="altro" data-k="exp">${svg('exp')}<span><b>Esporta e backup</b><small>Excel, CSV, messaggi, backup</small></span></button>
+   <button data-a="altro" data-k="sto">${svg('sto')}<span><b>Storico</b><small>Giornate archiviate e registro modifiche</small></span></button>
+   <button data-a="altro" data-k="imp">${svg('imp')}<span><b>Impostazioni</b><small>Operatore, saluto, sincronizzazione Google</small></span></button></div>`;
+}
+const back=t=>`<button class="lnk" data-a="altro" data-k="" style="margin-bottom:4px">‹ Altro</button><h2 style="margin:0 4px 12px;font-size:20px">${t}</h2>`;
+function viewExp(){
+  return back('Esporta e backup')+`<div class="menu">
+  <button data-a="xlsx"><span><b>Excel (.xlsx)</b><small>Forza, plotoni, messaggi, servizi, lezioni, sport</small></span></button>
+  <button data-a="csv"><span><b>Personale in CSV</b><small>Elenco con provvedimenti, apribile in Excel</small></span></button>
+  <button data-a="txtall"><span><b>Tutti i messaggi (.txt)</b><small>Compagnia, 1° e 2° Plotone di oggi</small></span></button>
+  <button data-a="json"><span><b>Backup completo (.json)</b><small>Tutti i dati dell’app, da reimportare</small></span></button>
+  <button data-a="jsoncopy"><span><b>Copia backup negli appunti</b><small>Se il download non parte su questo dispositivo</small></span></button>
+  <button data-a="import"><span><b>Importa backup</b><small>Sostituisce i dati attuali</small></span></button></div>`;
+}
+function viewSto(){
+  const arch=S.arch||[];
+  let h=back('Storico')+`<button class="btn" data-a="archive">Archivia la giornata del ${fdate(UI.date)}</button>`;
+  h+=`<div class="h2"><span>Giornate archiviate · ${arch.length}</span></div><div class="list">`;
+  h+=arch.length?arch.map((a,i)=>`<button class="srow" data-a="archView" data-i="${i}"><span class="sn">${esc(dlabel(a.date))}<small style="display:block">${a.u?esc(a.u):'—'}</small></span><span class="mut" style="font-variant-numeric:tabular-nums;text-align:right">${a.F[0].fe} · ${a.F[0].fp} · <b style="color:var(--ink)">${a.F[0].fd}</b></span></button>`).join(''):`<p class="empty">Ancora nessuna giornata archiviata.</p>`;
+  h+=`</div><div class="h2"><span>Registro modifiche</span></div><div class="list">`;
+  h+=S.log&&S.log.length?S.log.slice(0,60).map(l=>`<div class="logrow">${esc(l.x)}<small>${new Date(l.t).toLocaleString('it-IT',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'})} · ${esc(l.u)}</small></div>`).join(''):`<p class="empty">Nessuna modifica registrata.</p>`;
+  return h+`</div>`;
+}
+function viewImp(){
+  const intro=[0,1,2].map(v=>`<label>Firma · ${VN[v]}<input class="in" data-c="intro${v}" value="${esc(S.msg.intro[v])}" placeholder="(nessuna)"></label>`).join('');
+  return back('Impostazioni')+`<div class="card" style="padding:4px 14px 16px">
+   <label>Operatore<input class="in" data-c="op" value="${esc(CFG.operator)}" placeholder="Es. Stella"></label>
+   <label>Saluto iniziale<input class="in" data-c="saluto" value="${esc(S.msg.saluto)}"></label>${intro}</div>
+   <div class="h2"><span>Sincronizzazione</span></div>
+   <div class="card" style="padding:14px;margin-bottom:12px">
+    <b>Foglio Google Sheets Collegato</b>
+    <p style="font-size:13px;margin:4px 0 10px;color:var(--ink2)">Lettura diretta tramite proxy CORS da Google Drive.</p>
+    <button class="btn ghost sm" data-a="syncNow" style="width:100%">Ricarica dati da Google Drive ora</button>
+   </div>`;
+}
+
+function openSheet(k,d){UI.sheet=k;D=d||{};document.body.style.overflow='hidden';renderSheet();const s=$('#sheet .sh');if(s)s.scrollTop=0}
+function closeSheet(){UI.sheet=null;D={};document.body.style.overflow='';$('#sheet').innerHTML=''}
+function renderSheet(){
+  const el=$('#sheet');if(!UI.sheet){el.innerHTML='';return}
+  const sc=($('.sh',el)||{}).scrollTop||0;
+  el.innerHTML=`<div class="back" data-a="close"></div><div class="sh" role="dialog" aria-modal="true">${SHEETS[UI.sheet]()}</div>`;
+  const s=$('.sh',el);if(s)s.scrollTop=sc;
+}
+const head=(t,sub)=>`<div class="sh-h"><div><b>${esc(t)}</b>${sub?`<small>${esc(sub)}</small>`:''}</div><button class="x" data-a="close" aria-label="Chiudi">✕</button></div>`;
+const SHEETS={
+  person(){
+    const p=D.p,isNew=!p.id;
+    const chip=(l,a,on)=>`<button class="chip${on?' on':''}" ${a}>${esc(l)}</button>`;
+    const grp=(t,e)=>`<div class="gl">${t}</div><div class="chips">`+PRESETS.filter(x=>x[1]===e&&x[0]!=='ALTRO').map(x=>chip(x[0],`data-a="chipP" data-k="${esc(x[0])}"`,!p.custom&&p.prov===x[0])).join('')+`</div>`;
+    const saved=[...new Map(S.roster.filter(x=>x.custom&&x.prov).map(x=>[x.prov+'|'+x.eff,{n:x.prov,e:x.eff}])).values()];
+    let h=head(isNew?'Nuova persona':`${p.cognome} ${p.nome}`,isNew?'':`${p.grado} · ${p.pl}° Plotone`);
+    if(isNew)h+=`<div class="row2"><label>Grado<input class="in" list="gradi" data-d="p.grado" value="${esc(p.grado)}"></label><label>Plotone<div class="seg2" style="margin-top:5px">${[1,2].map(n=>`<button class="${p.pl===n?'on':''}" data-a="plSet" data-n="${n}">${n}°</button>`).join('')}</div></label></div><label>Cognome<input class="in up" data-d="p.cognome" value="${esc(p.cognome)}"></label><label>Nome<input class="in up" data-d="p.nome" value="${esc(p.nome)}"></label>`;
+    if(!isNew)h+=`<label>Grado<input class="in" list="gradi" data-d="p.grado" value="${esc(p.grado)}" autocapitalize="characters"></label>`;
+    h+=`<div class="gl">Provvedimento</div><div class="chips">${chip('Nessuno','data-a="chipNone"',!p.prov)}${chip('ALTRO','data-a="chipP" data-k="ALTRO"',!p.custom&&p.prov==='ALTRO')}${chip('✎ NUOVO','data-a="chipNew"',p.custom)}</div>`;
+    h+=grp('Scalano la Forza Presente','P')+grp('Scalano la Forza Disponibile','D');
+    if(saved.length)h+=`<div class="gl">Creati da te</div><div class="chips">`+saved.map((s,i)=>chip(`${s.n}`,`data-a="chipS" data-i="${i}"`,p.custom&&p.prov===s.n&&p.eff===s.e)).join('')+`</div>`;
+    D.saved=saved;
+    if(p.custom)h+=`<div class="cust"><label>Nome del provvedimento<input class="in up" data-d="p.prov" value="${esc(p.prov)}" maxlength="40" placeholder="NUOVO"></label><div class="gl" style="margin-top:12px">Cosa scala?</div><div class="seg2">${[['P','Forza Presente'],['D','Forza Disponibile'],['N','Nessuna']].map(([e,l])=>`<button class="${p.eff===e?'on':''}" data-a="eff" data-e="${e}">${l}</button>`).join('')}</div></div>`;
+    if(p.prov)h+=`<div class="pv">${pvHTML()}</div>`;
+    if(p.prov)h+=`<label>Data<input class="in" type="date" data-d="p.data" value="${esc(p.data)}"></label>`;
+    h+=`<label>Nota<input class="in" data-d="p.nota" value="${esc(p.nota)}" placeholder="Es. visita 04/11 ritrovo 09:20"></label>`;
+    if(!isNew)h+=`<div class="gl">Plotone</div><div class="seg2">${[1,2].map(n=>`<button class="${p.pl===n?'on':''}" data-a="plSet" data-n="${n}">${n}° Plotone</button>`).join('')}</div>`;
+    h+=`<datalist id="gradi"><option value="A.U."><option value="A.SC."><option value="A.CA.SC."><option value="A.ISTR."></datalist><div class="stack"><button class="btn" data-a="saveP">Salva</button>${!isNew?`<button class="lnk danger" data-a="delP" style="text-align:center">Elimina dal personale</button>`:''}</div>`;
+    return h;
+  },
+  pick(){
+    const sv=S.svcList[D.i];
+    let h=head(sv.n,dlabel(D.d))+`<div class="seg2" style="margin-top:10px"><button class="${!D.multi?'on':''}" data-a="pmode" data-m="0">Uno solo</button><button class="${D.multi?'on':''}" data-a="pmode" data-m="1">Più persone</button></div>`;
+    h+=`<div class="gl">Orario (facoltativo)</div><div class="chips">${SHIFTS.map(s=>`<button class="chip${D.o===s?' on':''}" data-a="shift" data-s="${s}">${s}</button>`).join('')}</div>`;
+    h+=`<input class="in" style="margin-top:10px" type="search" data-q="pq" placeholder="Cerca nel personale" value="${esc(D.pq||'')}" aria-label="Cerca">`;
+    h+=`<div class="pk" id="pk">${pickHTML()}</div><div class="stack"><button class="btn" data-a="close">Fatto</button>${sv.c?`<button class="lnk danger" data-a="delSvc" style="text-align:center">Elimina questo servizio</button>`:''}</div>`;
+    return h;
+  },
+  svcnew(){return head('Nuovo servizio')+`<label>Nome del servizio<input class="in up" data-d="n" value="${esc(D.n||'')}" maxlength="40" placeholder="Es. PORTINERIA"></label><div class="stack"><button class="btn" data-a="saveSvc">Aggiungi e scegli il personale</button></div>`},
+  gsadd(){
+    const sports=[...new Map(S.gs.map(x=>[x.sport,x.ora])).entries()];
+    let h=head('Aggiungi allo sport',dlabel(UI.date));
+    h+=`<div class="gl">Sport</div><div class="chips">${sports.map(([s,o],i)=>`<button class="chip${D.sport===s?' on':''}" data-a="gsSport" data-i="${i}">${esc(s)}</button>`).join('')}<button class="chip${D.sport==='__new'?' on':''}" data-a="gsSport" data-i="-1">✎ Nuovo sport</button></div>`;
+    D.sports=sports;
+    if(D.sport==='__new')h+=`<div class="row2"><label>Nome<input class="in up" data-d="nsport" value="${esc(D.nsport||'')}" placeholder="Es. JUDO"></label><label>Orario<input class="in" data-d="ora" value="${esc(D.ora||'')}" placeholder="18:00 - 19:30"></label></div>`;
+    else if(D.sport)h+=`<label>Orario<input class="in" data-d="ora" value="${esc(D.ora||'')}"></label>`;
+    h+=`<div class="gl">Giorni</div><div class="chips">${[1,2,3,4,5,6,7].map(n=>`<button class="chip${D.days.includes(n)?' on':''}" data-a="gsDay" data-n="${n}">${GG[n]}</button>`).join('')}</div>`;
+    h+=`<div class="gl">Stato</div><div class="seg2">${['Confermato','In attesa'].map(s=>`<button class="${D.stato===s?'on':''}" data-a="gsStato" data-s="${s}">${s}</button>`).join('')}</div>`;
+    h+=`<div class="gl">Personale · ${D.ids.length} ${D.ids.length===1?'scelto':'scelti'}</div><input class="in" type="search" data-q="pq" placeholder="Cerca nel personale" value="${esc(D.pq||'')}" aria-label="Cerca"><div class="pk" id="pk">${gsPickHTML()}</div>`;
+    return h+`<div class="stack"><button class="btn" data-a="saveGs">Salva</button></div>`;
+  },
+  gsedit(){
+    const x=S.gs[D.i],p=P(x.p);
+    return head(pn(p),`${x.sport} · ${GIORNI[x.g]}`)+`<div class="gl">Stato</div><div class="seg2">${['Confermato','In attesa'].map(s=>`<button class="${(/^conferm/i.test(x.stato)?'Confermato':'In attesa')===s?'on':''}" data-a="gsSet" data-s="${s}">${s}</button>`).join('')}</div>
+    <div class="stack"><button class="btn ghost" data-a="gsDel">Rimuovi da ${esc(x.sport)} (${esc(GIORNI[x.g])})</button><button class="lnk danger" data-a="gsDelAll" style="text-align:center">Rimuovi da tutti i giorni</button></div>`;
+  },
+  lez(){
+    const wk=wday(UI.date)<=5;
+    let h=head('Lezioni',`${GIORNI[wday(UI.date)]} ${fdate(UI.date)}`);
+    h+=`<div class="gl">Vale per</div><div class="seg2"><button class="${D.scope==='date'?'on':''}" data-a="lezScope" data-s="date">Solo questo giorno</button>${wk?`<button class="${D.scope==='week'?'on':''}" data-a="lezScope" data-s="week">Ogni ${GIORNI[wday(UI.date)].toLowerCase()}</button>`:''}</div><div class="gl">Attività</div>`;
+    h+=D.list.map((l,i)=>`<div class="lrow"><input class="in" data-d="list.${i}.ora" value="${esc(l.ora)}" placeholder="08:10-09:45" aria-label="Orario"><input class="in" data-d="list.${i}.nome" value="${esc(l.nome)}" placeholder="Lezione di…" aria-label="Attività"><button class="x" data-a="lezDel" data-i="${i}" aria-label="Elimina">✕</button></div>`).join('');
+    h+=`<button class="btn ghost sm" data-a="lezAdd" style="margin-top:4px">+ Aggiungi attività</button><div class="stack"><button class="btn" data-a="lezSave">Salva</button>${S.lezOv[UI.date]?`<button class="lnk" data-a="lezReset" style="text-align:center">Ripristina il modello settimanale</button>`:''}</div>`;
+    return h;
+  },
+  arch(){
+    const a=S.arch[D.i];
+    return head(dlabel(a.date),a.u?`Archiviata da ${a.u}`:'')+[0,1,2].map(v=>`<div class="gl">${VN[v]} · ${a.F[v].fe} · ${a.F[v].fp} · ${a.F[v].fd}</div><div class="bubble" style="font-size:13px;max-height:180px;overflow:auto">${esc(a.m[v]).replace(/\*([^*\n]+)\*/g,'<b>$1</b>')}</div><button class="btn ghost sm" data-a="archCopy" data-v="${v}">Copia messaggio</button>`).join('')+`<div class="stack"><button class="lnk danger" data-a="archDel" style="text-align:center">Elimina dallo storico</button></div>`;
+  },
+  confirm(){return head(D.title)+`<p style="margin:8px 0 0">${esc(D.text)}</p><div class="stack">${D.actions.map((x,i)=>`<button class="btn${x.ghost?' ghost':''}" data-a="confirmDo" data-i="${i}">${esc(x.l)}</button>`).join('')}<button class="lnk" data-a="close" style="text-align:center">Annulla</button></div>`}
+};
+
+function clearProv(ids,label,msg){
+  const prev=ids.map(id=>{const p=P(id);return {id,prov:p.prov,custom:p.custom,eff:p.eff,data:p.data}});
+  ids.forEach(id=>Object.assign(P(id),{prov:'',custom:false,eff:'',data:''}));
+  commit(label);
+  toast(msg,()=>{prev.forEach(x=>{const p=P(x.id);if(p)Object.assign(p,x)});commit('Rimozione annullata')});
+}
+function ask(title,text,actions){openSheet('confirm',{title,text,actions})}
+function pvHTML(){
+  const p=D.p,e=effOf(p);
+  const after=forzaOf(S.roster.filter(x=>x.pl===p.pl&&x.id!==p.id).concat([p]));
+  const cur=forzaOf(S.roster.filter(x=>x.pl===p.pl));
+  return `${EFFL[e]||''} · ${p.pl}° Plotone: Presente <b>${cur.fp}</b> → <b>${after.fp}</b> · Disponibile <b>${cur.fd}</b> → <b>${after.fd}</b>`;
+}
+function pickHTML(){
+  const sv=S.svcList[D.i],ents=S.servizi[D.d]||[],q=norm(D.pq);
+  const ppl=S.roster.filter(p=>inScope(p)&&(!q||norm(p.cognome+p.nome).includes(q)));
+  return ppl.map(p=>{const on=ents.some(e=>e.s===sv.n&&e.p===p.id),other=ents.filter(e=>e.p===p.id&&e.s!==sv.n).map(e=>e.s),e=effOf(p);
+    return `<button class="prsn${on?' sel':''}" data-a="pickT" data-id="${p.id}" role="checkbox" aria-checked="${on}"><span class="ck">${on?'✓':''}</span><span class="nm"><b>${esc(p.cognome)}</b> ${esc(p.nome)}${UI.view===0?` <span class="pl">${p.pl}° PL</span>`:''}${other.length?`<small>Già: ${esc(other.join(', '))}</small>`:''}</span>${p.prov?`<span class="tag ${e}">${esc(p.prov)}</span>`:''}</button>`}).join('')||'<p class="empty">Nessun risultato</p>';
+}
+function gsPickHTML(){
+  const q=norm(D.pq);
+  return S.roster.filter(p=>inScope(p)&&(!q||norm(p.cognome+p.nome).includes(q))).map(p=>{const on=D.ids.includes(p.id);
+    return `<button class="prsn${on?' sel':''}" data-a="gsPick" data-id="${p.id}" role="checkbox" aria-checked="${on}"><span class="ck">${on?'✓':''}</span><span class="nm"><b>${esc(p.cognome)}</b> ${esc(p.nome)}${UI.view===0?` <span class="pl">${p.pl}° PL</span>`:''}</span></button>`}).join('')||'<p class="empty">Nessun risultato</p>';
+}
+
+const A={
+  view(d){UI.view=+d.v;UI.msgDraft=null;render()},
+  tab(d){if(UI.tab===d.t&&d.t==='altro')UI.altro=null;UI.tab=d.t;UI.msgDraft=null;render();window.scrollTo(0,0)},
+  day(d){UI.date=addDays(UI.date,+d.n);UI.msgDraft=null;render()},
+  today(){UI.date=isoToday();UI.msgDraft=null;render()},
+  close(d,el,e){if(el.classList.contains('back')&&e.target!==el)return;closeSheet()},
+  showAll(){UI.all=!UI.all;render()},
+  provOpen(d){UI.open[d.k]=!UI.open[d.k];render()},
+  pf(d){UI.pf=d.k;render()},
+  sub(d){UI.sub=d.k;render()},
+  altro(d){UI.altro=d.k||null;render();window.scrollTo(0,0)},
+  async syncNow(){
+    toast('Ricarico i dati da Google Sheets...');
+    await syncFromGoogleDrive();
+  },
+  pClear(d){const p=P(+d.id);clearProv([p.id],`${p.prov} tolto a ${pn(p)}`,`Tolto a ${p.cognome}`)},
+  grpClear(d){const k=d.k,ids=S.roster.filter(p=>inScope(p)&&p.prov===k).map(p=>p.id),n=ids.length;ask(`Togliere «${k}» a tutti?`,`${n} ${n===1?'persona':'persone'} · ${VN[UI.view]}. Subito dopo potrai annullare.`,[{l:`Togli a tutti (${n})`,fn(){clearProv(ids,`${k} tolto a ${n} persone`,`Tolto a ${n} ${n===1?'persona':'persone'}`)}}])},
+  allClear(){const ids=S.roster.filter(p=>inScope(p)&&p.prov).map(p=>p.id),n=ids.length;ask('Togliere tutti i provvedimenti?',`${n} ${n===1?'persona':'persone'} · ${VN[UI.view]}. Subito dopo potrai annullare.`,[{l:`Togli tutti (${n})`,fn(){clearProv(ids,`Tutti i provvedimenti tolti (${n})`,`Tolti a ${n} ${n===1?'persona':'persone'}`)}}])},
+  editP(d){const p=P(+d.id);openSheet('person',{p:clone(p),orig:p})},
+  newP(){openSheet('person',{p:{id:0,pl:UI.view||1,grado:'A.U.',cognome:'',nome:'',prov:'',custom:false,eff:'',data:'',nota:''},orig:null})},
+  chipNone(){Object.assign(D.p,{prov:'',custom:false,eff:'',data:''});renderSheet()},
+  chipP(d){Object.assign(D.p,{prov:d.k,custom:false,eff:''});renderSheet()},
+  chipNew(){const p=D.p;if(!p.custom){Object.assign(p,{prov:'NUOVO',custom:true,eff:'D'})}renderSheet()},
+  chipS(d){const s=D.saved[+d.i];Object.assign(D.p,{prov:s.n,custom:true,eff:s.e});renderSheet()},
+  eff(d){D.p.eff=d.e;renderSheet()},
+  plSet(d){D.p.pl=+d.n;renderSheet()},
+  saveP(){
+    const p=D.p;
+    if(!p.id){p.cognome=p.cognome.trim().toUpperCase();p.nome=p.nome.trim().toUpperCase();p.grado=p.grado.trim()||'A.U.';if(!p.cognome){toast('Scrivi il cognome');return}}
+    if(p.custom){p.prov=(p.prov||'').trim().toUpperCase();if(!p.prov){toast('Scrivi il nome del provvedimento');return}}
+    if(!p.prov){p.data='';p.custom=false;p.eff=''}
+    if(!p.custom)p.eff='';
+    if(p.id){const o=P(p.id),g=(p.grado||'').trim().toUpperCase()||o.grado,gch=g!==o.grado;if(gch){S.gradi=S.gradi||{};S.gradi[gkey(o)]=g}p.grado=g;const moved=o.pl!==p.pl;Object.assign(o,p);if(moved)S.roster.sort((a,b)=>a.pl-b.pl);commit(`${pn(o)}${gch?' · grado '+g:''}: ${p.prov||'nessun provvedimento'}${p.prov&&p.data?' ('+fdate(p.data)+')':''}`)}
+    else{p.id=S.nextId++;S.roster.push(p);S.roster.sort((a,b)=>a.pl-b.pl);commit(`Aggiunto ${pn(p)} al ${p.pl}° Plotone`)}
+    closeSheet();toast('Salvato');
+  },
+  delP(){const p=D.orig;ask('Eliminare dal personale?',`${pn(p)} verrà tolto dal ${p.pl}° Plotone, dai servizi e dagli sport.`,[{l:'Elimina',fn(){S.roster=S.roster.filter(x=>x.id!==p.id);S.gs=S.gs.filter(x=>x.p!==p.id);for(const d in S.servizi)S.servizi[d]=S.servizi[d].filter(x=>x.p!==p.id);commit(`Eliminato ${pn(p)}`);closeSheet()}}])},
+  svcOpen(d){const dd=d.d||UI.date,n=S.svcList[+d.i].n;openSheet('pick',{i:+d.i,d:dd,pq:'',o:'',multi:(S.servizi[dd]||[]).filter(e=>e.s===n).length>1})},
+  svm(d){UI.svm=d.k;render()},
+  calDay(d){UI.date=d.d;UI.msgDraft=null;render()},
+  wk(d){UI.date=addDays(UI.date,7*(+d.n));render()},
+  mon(d){const x=new Date(UI.date+'T12:00:00'),day=x.getDate();x.setDate(1);x.setMonth(x.getMonth()+(+d.n));x.setDate(Math.min(day,new Date(x.getFullYear(),x.getMonth()+1,0).getDate()));UI.date=isoOf(x);render()},
+  pickT(d){
+    const sv=S.svcList[D.i],id=+d.id,dd=D.d,arr=S.servizi[dd]=S.servizi[dd]||[];
+    const k=arr.findIndex(e=>e.s===sv.n&&e.p===id);
+    if(k>=0)arr.splice(k,1);
+    else{if(!D.multi)for(let j=arr.length-1;j>=0;j--)if(arr[j].s===sv.n&&inScope(P(arr[j].p)))arr.splice(j,1);arr.push({s:sv.n,p:id,o:D.o||''})}
+    commit(`${sv.n} ${fdate(dd)}: ${k>=0?'tolto':'assegnato'} ${pn(P(id))}`);
+  },
+  pmode(d){D.multi=d.m==='1';renderSheet()},
+  shift(d){D.o=D.o===d.s?'':d.s;(S.servizi[D.d]||[]).filter(e=>e.s===S.svcList[D.i].n).forEach(e=>e.o=D.o);save();render()},
+  svcNew(){openSheet('svcnew',{n:''})},
+  saveSvc(){const n=(D.n||'').trim().toUpperCase();if(!n){toast('Scrivi il nome del servizio');return}let i=svcIdx(n);if(i<0){S.svcList.push({n,c:true});i=S.svcList.length-1;commit(`Nuovo servizio: ${n}`)}openSheet('pick',{i,d:UI.date,pq:'',o:'',multi:false});render()},
+  delSvc(){const sv=S.svcList[D.i];ask('Eliminare il servizio?',`«${sv.n}» sparirà dall’elenco e da tutte le date.`,[{l:'Elimina',fn(){for(const d in S.servizi)S.servizi[d]=S.servizi[d].filter(e=>e.s!==sv.n);S.svcList=S.svcList.filter(s=>s.n!==sv.n);commit(`Servizio eliminato: ${sv.n}`);closeSheet()}}])},
+  lezEdit(){const wk=wday(UI.date)<=5;const sc=S.lezOv[UI.date]||!wk?'date':'week';openSheet('lez',{scope:sc,list:clone(S.lezOv[UI.date]||S.lezioni[wday(UI.date)]||[])})},
+  lezScope(d){D.scope=d.s;D.list=clone(d.s==='week'?(S.lezioni[wday(UI.date)]||[]):(S.lezOv[UI.date]||S.lezioni[wday(UI.date)]||[]));renderSheet()},
+  lezAdd(){D.list.push({nome:'',ora:''});renderSheet()},
+  lezDel(d){D.list.splice(+d.i,1);renderSheet()},
+  lezSave(){const l=D.list.filter(x=>x.nome.trim()).map(x=>({nome:x.nome.trim(),ora:x.ora.trim()}));if(D.scope==='week')S.lezioni[wday(UI.date)]=l;else S.lezOv[UI.date]=l;commit(`Lezioni ${D.scope==='week'?'di ogni '+GIORNI[wday(UI.date)].toLowerCase():'del '+fdate(UI.date)} aggiornate`);closeSheet();toast('Salvato')},
+  lezReset(){delete S.lezOv[UI.date];commit(`Lezioni del ${fdate(UI.date)} ripristinate`);closeSheet()},
+  gsAdd(){openSheet('gsadd',{sport:'',nsport:'',ora:'',days:[wday(UI.date)],stato:'Confermato',ids:[],pq:''})},
+  gsSport(d){const i=+d.i;if(i<0){D.sport='__new';D.ora=''}else{D.sport=D.sports[i][0];D.ora=D.sports[i][1]}renderSheet()},
+  gsDay(d){const n=+d.n;D.days=D.days.includes(n)?D.days.filter(x=>x!==n):[...D.days,n];renderSheet()},
+  gsStato(d){D.stato=d.s;renderSheet()},
+  gsPick(d){const id=+d.id;D.ids=D.ids.includes(id)?D.ids.filter(x=>x!==id):[...D.ids,id];renderSheet()},
+  saveGs(){
+    const sport=D.sport==='__new'?(D.nsport||'').trim().toUpperCase():D.sport;
+    if(!sport){toast('Scegli o scrivi lo sport');return}
+    if(!D.ids.length){toast('Scegli almeno una persona');return}
+    if(!D.days.length){toast('Scegli almeno un giorno');return}
+    let n=0;for(const g of D.days)for(const id of D.ids){if(!S.gs.some(x=>x.g===g&&x.sport===sport&&x.p===id)){S.gs.push({g,sport,ora:(D.ora||'').trim(),p:id,stato:D.stato});n++}}
+    commit(`Sport ${sport}: ${n} iscrizioni aggiunte`);closeSheet();toast(n?'Salvato':'Già presenti');
+  },
+  gsEdit(d){openSheet('gsedit',{i:+d.i})},
+  gsSet(d){S.gs[D.i].stato=d.s;commit(`${S.gs[D.i].sport}: ${pn(P(S.gs[D.i].p))} → ${d.s}`);},
+  gsDel(){const x=S.gs[D.i];S.gs.splice(D.i,1);commit(`${x.sport}: tolto ${pn(P(x.p))} (${GIORNI[x.g]})`);closeSheet()},
+  gsDelAll(){const x=S.gs[D.i];S.gs=S.gs.filter(y=>!(y.sport===x.sport&&y.p===x.p));commit(`${x.sport}: tolto ${pn(P(x.p))} da tutti i giorni`);closeSheet()},
+  wa(){const t=UI.msgDraft!==null?UI.msgDraft:msgFor(UI.view);let w=null;try{w=window.open('https://wa.me/?text='+encodeURIComponent(t),'_blank')}catch(e){}copyText(t);toast(w?'Apro WhatsApp…':'Messaggio copiato: incollalo in WhatsApp')},
+  async copy(){const ok=await copyText(UI.msgDraft!==null?UI.msgDraft:msgFor(UI.view));toast(ok?'Messaggio copiato':'Copia non riuscita')},
+  editMsg(){UI.msgDraft=UI.msgDraft!==null?null:msgFor(UI.view);render()},
+  archive(){
+    const snap={date:UI.date,ts:Date.now(),u:CFG.operator,F:{0:forza(0),1:forza(1),2:forza(2)},m:{0:msgFor(0),1:msgFor(1),2:msgFor(2)}};
+    S.arch=S.arch||[];
+    S.arch=S.arch.filter(a=>a.date!==UI.date);S.arch.unshift(snap);S.arch.sort((a,b)=>b.date<a.date?-1:1);if(S.arch.length>150)S.arch.length=150;
+    commit(`Giornata ${fdate(UI.date)} archiviata`);toast('Giornata archiviata');
+  },
+  archView(d){openSheet('arch',{i:+d.i})},
+  async archCopy(d){toast(await copyText(S.arch[D.i].m[+d.v])?'Messaggio copiato':'Copia non riuscita')},
+  archDel(){const i=D.i,a=S.arch[i];ask('Eliminare dallo storico?',`Giornata del ${fdate(a.date)}.`,[{l:'Elimina',fn(){S.arch.splice(i,1);commit()}}])},
+  async confirmDo(d){const a=D.actions[+d.i];closeSheet();await a.fn()},
+  xlsx(){exportXlsx()},csv(){exportCsv()},txtall(){exportTxt()},json(){exportJson()},
+  async jsoncopy(){toast(await copyText(JSON.stringify(S))?'Backup copiato negli appunti':'Copia non riuscita')},
+  import(){$('#file').click()}
+};
+
+function handle(a,d,el,e){const f=A[a];if(f)f(d,el,e)}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-a]');if(!t)return;if(t.classList.contains('back')&&e.target!==t)return;handle(t.dataset.a,t.dataset,t,e)});
+document.addEventListener('input',e=>{
+  const t=e.target;
+  if(t.dataset.d!==undefined){setPath(D,t.dataset.d,t.value);if(t.dataset.d==='p.prov'&&D.p&&D.p.custom){const pv=$('.pv');if(pv)pv.innerHTML=pvHTML()}}
+  else if(t.dataset.q==='q'){UI.q=t.value;renderPList()}
+  else if(t.dataset.q==='pq'){D.pq=t.value;const pk=$('#pk');if(pk)pk.innerHTML=UI.sheet==='gsadd'?gsPickHTML():pickHTML()}
+  else if(t.dataset.q==='md'){UI.msgDraft=t.value}
+});
+document.addEventListener('change',e=>{
+  const t=e.target,c=t.dataset.c;if(!c)return;
+  if(c==='date'){if(t.value){UI.date=t.value;UI.msgDraft=null;render()}}
+  else if(c==='op'){CFG.operator=t.value.trim();saveCfg()}
+  else if(c==='saluto'){S.msg.saluto=t.value;save()}
+  else if(c.startsWith('intro')){S.msg.intro[+c.slice(5)]=t.value.trim();save()}
+});
+$('#file').addEventListener('change',async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  try{const r=JSON.parse(await f.text());if(!r||!Array.isArray(r.roster))throw 0;ask('Importare il backup?',`Sostituisce tutti i dati attuali con quelli del file «${f.name}».`,[{l:'Importa',fn(){S=r;S.arch=S.arch||[];save();render();toast('Backup importato')}}])}
+  catch(err){toast('File non valido')}
+});
+
+async function copyText(t){
+  try{await navigator.clipboard.writeText(t);return true}catch(e){}
+  try{const ta=document.createElement('textarea');ta.value=t;ta.style.cssText='position:fixed;opacity:0;top:0';document.body.appendChild(ta);ta.focus();ta.select();const ok=document.execCommand('copy');ta.remove();return ok}catch(e){return false}
+}
+let toastT=null;
+function toast(m,undo){const t=$('#toast');t.textContent=m;if(undo){const b=document.createElement('button');b.className='tu';b.textContent='Annulla';b.onclick=()=>{t.classList.remove('on');undo()};t.append(' ',b)}t.classList.toggle('act',!!undo);t.classList.add('on');clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove('on'),undo?7000:2200)}
+
+const stamp=()=>UI.date.replace(/-/g,'');
+async function saveFile(name,blob){
+  try{const f=new File([blob],name,{type:blob.type});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f],title:name});return}}catch(e){}
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},3000);toast('File pronto: '+name);
+}
+function exportJson(){saveFile(`forza10cp_backup_${stamp()}.json`,new Blob([JSON.stringify(S)],{type:'application/json'}))}
+function exportTxt(){const t=[0,1,2].map(v=>`===== ${VN[v].toUpperCase()} =====\n\n`+msgFor(v)).join('\n\n\n');saveFile(`forza10cp_messaggi_${stamp()}.txt`,new Blob([t],{type:'text/plain;charset=utf-8'}))}
+function exportCsv(){
+  const rows=[['PLOTONE','NR','GRADO','COGNOME','NOME','PROVVEDIMENTO','EFFETTO','DATA','NOTA']];
+  [1,2].forEach(pl=>S.roster.filter(p=>p.pl===pl).forEach((p,i)=>rows.push([pl,i+1,p.grado,p.cognome,p.nome,p.prov,p.prov?EFFL[effOf(p)]:'',fdate(p.data),p.nota])));
+  const csv='\ufeff'+rows.map(r=>r.map(c=>`"${String(c??'').replace(/"/g,'""')}"`).join(';')).join('\r\n');
+  saveFile(`forza10cp_personale_${stamp()}.csv`,new Blob([csv],{type:'text/csv;charset=utf-8'}));
+}
+async function exportXlsx(){
+  toast('Preparo il file Excel…');
+  let X=window.XLSX;
+  const wb=X.utils.book_new(),add=(n,rows,w)=>{const ws=X.utils.aoa_to_sheet(rows);if(w)ws['!cols']=w.map(x=>({wch:x}));X.utils.book_append_sheet(wb,ws,n)};
+  const hdr=['NR','GRADO','COGNOME','NOME','PROVVEDIMENTO','DATA','NOTA'];
+  const plSheet=pl=>{const F=forza(pl),l=S.roster.filter(p=>p.pl===pl);return [[`${pl}°PL`,fdate(UI.date)],['Forza Effettiva',F.fe],['Forza Presente',F.fp],['Forza Disponibile',F.fd],[],hdr,...l.map((p,i)=>[i+1,p.grado,p.cognome,p.nome,p.prov,fdate(p.data),p.nota])]};
+  const F0=forza(0);
+  add('FORZA 10CP',[['10ª COMPAGNIA',fdate(UI.date)],['F.E.',F0.fe],['F.P.',F0.fp],['F.D.',F0.fd],[],['PLOTONE',...hdr.slice(1)],...[1,2].flatMap(pl=>S.roster.filter(p=>p.pl===pl).map(p=>[pl+'°',p.grado,p.cognome,p.nome,p.prov,fdate(p.data),p.nota]))],[8,8,18,18,26,12,30]);
+  add('1PL',plSheet(1),[5,8,18,18,26,12,30]);add('2PL',plSheet(2),[5,8,18,18,26,12,30]);
+  [[1,'MEX 1PL'],[2,'MEX 2PL'],[0,'MEX CP']].forEach(([v,n])=>add(n,[['MESSAGGIO WHATSAPP'],...msgFor(v).split('\n').map(x=>[x])],[90]));
+  const dates=Object.keys(S.servizi).sort();
+  add('SERVIZI',[['DATA','GIORNO',...S.svcList.map(s=>s.n)],...dates.map(d=>[fdate(d),GG[wday(d)],...S.svcList.map(s=>(S.servizi[d]||[]).filter(e=>e.s===s.n&&P(e.p)).map(e=>`${gr(P(e.p).grado)} ${pn(P(e.p))}${e.o?' ('+e.o+')':''}`).join(' / '))])],[11,7,...S.svcList.map(()=>22)]);
+  add('LEZIONI',[['GIORNO','ATTIVITÀ','ORARIO'],...[1,2,3,4,5].flatMap(g=>(S.lezioni[g]||[]).map(l=>[GIORNI[g],l.nome,l.ora]))],[12,36,14]);
+  add('GS',[['GIORNO','SPORT','ORARIO','GRADO','COGNOME','NOME','STATO'],...S.gs.filter(x=>P(x.p)).map(x=>{const p=P(x.p);return [GIORNI[x.g],x.sport,x.ora,p.grado,p.cognome,p.nome,x.stato]})],[12,16,16,8,18,18,12]);
+  const out=X.write(wb,{bookType:'xlsx',type:'array'});
+  saveFile(`FORZA_10cp_${stamp()}.xlsx`,new Blob([out],{type:'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'}));
+}
+
+const dt=v=>{
+  if(v instanceof Date&&!isNaN(v))return isoOf(new Date(v.getTime()+432e5));
+  if(typeof v==='number'&&v>20000){const d=new Date(Math.round((v-25569)*864e5)+432e5);return d.getUTCFullYear()+'-'+pad(d.getUTCMonth()+1)+'-'+pad(d.getUTCDate())}
+  if(typeof v==='string'&&/^\d{4}-\d{2}-\d{2}/.test(v))return v.slice(0,10);
+  return '';
+};
+function findP(roster,cog,nome){
+  const c=norm(cog),n=norm(nome);if(!c)return -1;
+  let k=roster.map((p,i)=>i).filter(i=>norm(roster[i].cognome)===c);
+  if(k.length>1&&n){const k2=k.filter(i=>norm(roster[i].nome).startsWith(n.slice(0,4)));if(k2.length)k=k2}
+  if(k.length)return k[0];
+  for(let i=0;i<roster.length;i++){const pc=norm(roster[i].cognome);if(pc.startsWith(c)||c.startsWith(pc))return i;if(pc.length===c.length){let d=0;for(let j=0;j<pc.length;j++)if(pc[j]!==c[j])d++;if(d<=1)return i}}
+  return -1;
+}
+function parseWb(X,wb){
+  const sh=n=>{const ws=wb.Sheets[n];if(!ws)throw new Error('manca il foglio «'+n+'»');const rg=X.utils.decode_range(ws['!ref']||'A1');rg.s={r:0,c:0};return X.utils.sheet_to_json(ws,{header:1,range:rg,raw:true,defval:null,blankrows:true})};
+  const T=v=>String(v??'').replace(/\u200b/g,'').trim();
+  const roster=[];
+  [1,2].forEach(pl=>{const rows=sh(pl+'PL');for(let r=9;r<45;r++){const x=rows[r]||[],cog=T(x[2]);if(!cog)continue;const prov=T(x[4]),nt=[];if(T(x[6]))nt.push(T(x[6]));if(r>=18&&T(x[7]))nt.push(T(x[7]));roster.push({pl,grado:T(x[1])||'A.U.',cognome:cog,nome:T(x[3]),prov,data:prov?dt(x[5]):'',nota:nt.join(' · ')})}});
+  if(!roster.length)throw new Error('nessuna persona nei fogli 1PL/2PL');
+  let unm=0;const rows=sh('SERVIZI'),head=rows[1]||[],cols=[],svcNames=[],servizi=[];
+  for(let c=2;c<head.length;c+=3)if(T(head[c])){cols.push(c);svcNames.push(T(head[c]).replace(/^[-\s*]+|[*\s-]+$/g,'').trim())}
+  for(let r=3;r<rows.length;r++){const d=dt(rows[r][0]);if(!d)continue;cols.forEach((c,j)=>{const cg=T(rows[r][c+1]);if(!cg)return;const i=findP(roster,cg,T(rows[r][c+2]));if(i<0)unm++;else servizi.push({d,s:svcNames[j],pi:i})})}
+  const GM={lunedi:1,martedi:2,mercoledi:3,giovedi:4,venerdi:5,sabato:6,domenica:7},lez={};let cur=0;
+  for(const r of sh('LEZIONI')){const a=T(r[0]),b=T(r[1]),k=GM[norm(a)];if(k&&k<=5){cur=k;lez[k]=[];continue}if(a.startsWith('-')&&cur)lez[cur].push({nome:a.replace(/^[-\s]+/,'').trim(),ora:b.replace(/^[*;.\s]+|[*;.\s]+$/g,'')})}
+  const gs=[],g=sh('GS');
+  for(let i=1;i<g.length;i++){const x=g[i],k=GM[norm(T(x[0]))];if(!k||!T(x[1]))continue;const p=findP(roster,T(x[4]),T(x[5]));if(p<0)unm++;else gs.push({g:k,sport:T(x[1]),ora:T(x[2]),pi:p,stato:T(x[6])})}
+  return {roster,servizi,svcNames,lez,gs,unm};
+}
+
+async function syncFromGoogleDrive() {
+  try {
+    const response = await fetch(PROXY_URL);
+    if(!response.ok) throw new Error("Errore di risposta dalla rete");
+    const buffer = await response.arrayBuffer();
+    const X = window.XLSX;
+    const wb = X.read(new Uint8Array(buffer), {type: 'array', cellDates: true});
+    const parsed = parseWb(X, wb);
+
+    let nextId = 1;
+    const roster = parsed.roster.map(p => ({
+      id: nextId++,
+      pl: p.pl,
+      grado: GR0[gkey(p)] || p.grado,
+      cognome: p.cognome,
+      nome: p.nome,
+      prov: p.prov,
+      custom: !!p.prov && !PM[p.prov],
+      eff: PM[p.prov] ? '' : 'N',
+      data: p.data,
+      nota: p.nota
+    }));
+
+    const ids = roster.map(p => p.id);
+    const sv = {};
+    parsed.servizi.forEach(e => {
+      (sv[e.d] = sv[e.d] || []).push({s: e.s, p: ids[e.pi], o: ''});
+    });
+
+    const svcList = parsed.svcNames.map(n => ({n, c: false}));
+
+    S = {
+      v: 1,
+      rev: Date.now(),
+      roster,
+      servizi: sv,
+      svcList,
+      lezioni: parsed.lez,
+      lezOv: {},
+      gs: parsed.gs.map(x => ({g: x.g, sport: x.sport, ora: x.ora, p: ids[x.pi], stato: x.stato})),
+      arch: (S && S.arch) || [],
+      log: (S && S.log) || [],
+      msg: (S && S.msg) || {saluto: 'Comandi Signor Tenente,', intro: {0: '', 1: '', 2: 'Allievo Scelto Alberto STELLA, III Battaglione, 10ª Compagnia, II Plotone.'}}
+    };
+
+    const now = new Date().toLocaleTimeString('it-IT', {hour: '2-digit', minute: '2-digit'});
+    syncStatusText = `✓ Sincronizzato con Google Sheets · ${now}`;
+    isSyncOk = true;
+    save();
+    render();
+    toast('Dati aggiornati da Google Sheets!');
+  } catch(e) {
+    console.error(e);
+    syncStatusText = "⚠️ Connessione a Google Sheets non riuscita (dati locali attivi)";
+    isSyncOk = false;
+    if(!S) S = initSeed();
+    render();
+    toast('Dati locali attivi');
+  }
+}
+
+async function boot(){
+  try{const c=ls.get(CKEY);if(c)Object.assign(CFG,JSON.parse(c))}catch(e){}
+  try{const r=ls.get(KEY);S=r?JSON.parse(r):null}catch(e){S=null}
+  if(!S) S = initSeed();
+
+  render();
+  await syncFromGoogleDrive();
+}
+
+window.__forza={get S(){return S},msgFor,forza,UI};
+boot();
+})();
+</script>
+</body>
+</html>
+```
+
+---
+
+### Come provarlo subito:
+1. Scarica il file `Forza 10ª CP.html` aggiornato.
+2. Apri il file direttamente sul browser del tuo iPhone o PC: si collegherà automaticamente in sottofondo a Google Drive e mostrerà la conferma in verde **"✓ Sincronizzato con Google Sheets"**.
